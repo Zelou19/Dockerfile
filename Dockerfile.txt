@@ -1,7 +1,7 @@
 # Usa uma imagem base do Ubuntu
 FROM ubuntu:20.04
 
-# Atualiza e instala pacotes essenciais: tor, git, sudo, curl, bash
+# Atualiza os pacotes e instala dependências
 RUN apt-get update && apt-get install -y \
     tor \
     git \
@@ -10,17 +10,18 @@ RUN apt-get update && apt-get install -y \
     bash \
     && rm -rf /var/lib/apt/lists/*
 
-# Clona o repositório Insta-Cypher do GitHub
+# Clona o repositório Insta-Cypher
 RUN git clone https://github.com/pralinkhaira/Insta-Cypher /insta-cypher
 
-# Define o diretório de trabalho no container
+# Define o diretório de trabalho
 WORKDIR /insta-cypher
 
-# Torna o script insta.sh executável
+# Torna o script executável
 RUN chmod +x insta.sh
 
-# Expondo a porta 9050 para o Tor (se necessário)
+# Expondo a porta 9050 para o Tor
 EXPOSE 9050
 
-# Inicia o Tor e depois executa o script insta.sh
-CMD service tor start && ./insta.sh
+# Inicializa o Tor diretamente e executa o script
+CMD tor & ./insta.sh
+
